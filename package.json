@@ -1,0 +1,23 @@
+{
+  "name": "patrocalc",
+  "version": "1.0.0",
+  "description": "Intive Patronage2020 - recruitment",
+  "main": "./src/app.js",
+  "dependencies": {
+    "bootstrap-material-design": "^4.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarKust71/patronage2020-0.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MarKust71/patronage2020-0/issues"
+  },
+  "homepage": "https://github.com/MarKust71/patronage2020-0#readme"
+}
