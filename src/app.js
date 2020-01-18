@@ -1,8 +1,14 @@
-const displayUpdate = () => (document.getElementById('display').innerText = patroCalc.displayString);
-
 const patroCalc = {
   maxDisplayLength: 13,
   displayString: '0'
+};
+
+const displayUpdate = origin => {
+  if (patroCalc.displayString.length > patroCalc.maxDisplayLength) {
+    patroCalc.displayString = patroCalc.displayString.substring(0, patroCalc.maxDisplayLength);
+  }
+  patroCalc.displayString = patroCalc.displayString.replace('NaN', 'Error');
+  document.getElementById('display').innerText = patroCalc.displayString;
 };
 
 const initCalc = () => {
@@ -34,27 +40,26 @@ const calculate = operation => {
   switch (operation) {
     case '+':
       patroCalc.displayString = (parseFloat(patroCalc.storedDisplay) + parseFloat(patroCalc.storedValue)).toString();
-      displayUpdate();
       break;
     case '-':
       patroCalc.displayString = (parseFloat(patroCalc.storedDisplay) - parseFloat(patroCalc.storedValue)).toString();
-      displayUpdate();
       break;
     case '*':
       patroCalc.displayString = (parseFloat(patroCalc.storedDisplay) * parseFloat(patroCalc.storedValue)).toString();
-      displayUpdate();
       break;
     case '/':
       patroCalc.displayString = (parseFloat(patroCalc.storedDisplay) / parseFloat(patroCalc.storedValue)).toString();
-      displayUpdate();
+      break;
+    case 'power':
+      patroCalc.displayString = (parseFloat(patroCalc.storedDisplay) ** parseFloat(patroCalc.storedValue)).toString();
+      break;
+    case 'root':
+      patroCalc.displayString = (parseFloat(patroCalc.storedDisplay) ** (1 / parseFloat(patroCalc.storedValue))).toString();
       break;
     default:
       return;
   }
 
-  if (patroCalc.displayString.length > patroCalc.maxDisplayLength)
-    patroCalc.displayString = patroCalc.displayString.substring(0, patroCalc.maxDisplayLength);
+  displayUpdate(operation);
   patroCalc.storedDisplay = patroCalc.displayString;
-
-  displayUpdate();
 };

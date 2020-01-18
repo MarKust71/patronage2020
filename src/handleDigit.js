@@ -1,5 +1,4 @@
 const handleDigit = digit => {
-  // console.log('handleDigit:', digit);
   if (patroCalc.displayString === '0' || patroCalc.commandJustClicked) {
     patroCalc.displayString = `${digit}`;
     displayUpdate();

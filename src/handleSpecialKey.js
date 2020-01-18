@@ -1,5 +1,4 @@
 const handleSpecialKey = key => {
-  // console.log('handleSpecialKey:', key);
   let values;
 
   values = ['C', 'Escape'];
@@ -57,7 +56,7 @@ const handleSpecialKey = key => {
         }
         patroCalc.commandJustClicked = true;
       } else {
-        values = ['+', '-', '*', '/'];
+        values = ['+', '-', '*', '/', 'power', 'root'];
         if (values.indexOf(key) in values) {
           patroCalc.storedDisplay = patroCalc.displayString;
           patroCalc.storedCommand = key;
