@@ -1,5 +1,5 @@
 const buttons = [];
-const commands = ['C', 'CE', '/', 'x', '-', '+', '+/-', '.', '=', 'power', 'root'];
+const commands = ['C', 'CE', '/', 'x', '-', '+', '+/-', '.', '=', 'power', 'root', '(', ')'];
 
 const buttonClicked = i => {
   if (i.target.value <= 9) {

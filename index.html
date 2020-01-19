@@ -25,7 +25,8 @@
         <button class="btn oper leftbracket" id="btn(" value="(">(</button>
         <button class="btn oper rightbracket" id="btn)" value=")">)</button>
         <button class="btn oper power" id="btnpower" value="power">x<sup>y</sup></button>
-        <button class="btn oper root" id="btnroot" value="root">x<sup>1/y</sup></button>
+        <!-- <button class="btn oper root" id="btnroot" value="root">x<sup>1/y</sup></button> -->
+        <button class="btn oper root" id="btnroot" value="root"><sup>y</sup>&#x221A;x</button>
         <button class="btn number" id="btn7" value="7">7</button>
         <button class="btn number" id="btn8" value="8">8</button>
         <button class="btn number" id="btn9" value="9">9</button>
@@ -59,6 +60,7 @@
       integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9"
       crossorigin="anonymous"
     ></script>
+    <script type="application/javascript" src="./src/nbpApi.js"></script>
     <script type="application/javascript" src="./src/DOMEvents.js"></script>
     <script type="application/javascript" src="./src/keyboardEvents.js"></script>
     <script type="application/javascript" src="./src/handleDigit.js"></script>

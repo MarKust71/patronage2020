@@ -1,6 +1,8 @@
 const handleSpecialKey = key => {
   let values;
 
+  key = key.replace('^', 'power');
+
   values = ['C', 'Escape'];
   if (values.indexOf(key) in values) {
     initCalc();
@@ -21,14 +23,18 @@ const handleSpecialKey = key => {
         patroCalc.commandJustClicked = false;
       } else {
         if (patroCalc.displayString.length > 1) {
+          if (patroCalc.displayString[patroCalc.displayString.length - 1] === ')') patroCalc.brackets++;
+          if (patroCalc.displayString[patroCalc.displayString.length - 1] === '(') patroCalc.brackets--;
           patroCalc.displayString = patroCalc.displayString.substring(0, patroCalc.displayString.length - 1);
         } else {
           patroCalc.displayString = '0';
         }
-        displayUpdate();
+        displayUpdate('handleSpecialKey.CE');
       }
       return;
+
     case '=':
+      /* previous task
       if (patroCalc.storedCommand) {
         patroCalc.storedValue = patroCalc.displayString;
         calculate(patroCalc.storedCommand);
@@ -38,15 +44,72 @@ const handleSpecialKey = key => {
         patroCalc.commandJustClicked = true;
         return;
       }
+*/
+      const areBracketsClosed = !!!(
+        (patroCalc.displayString.match(/\(/g) || []).length - (patroCalc.displayString.match(/\)/g) || []).length
+      );
+      if (areBracketsClosed) {
+        patroCalc.parseDisplayString();
+        patroCalc.storedCommand = '';
+        patroCalc.storedDisplay = '';
+        patroCalc.storedValue = '';
+        patroCalc.commandJustClicked = true;
+        displayUpdate('handleSpecialKey.=');
+      }
       return;
+
     case '+/-':
       patroCalc.storedCommand = '';
       patroCalc.storedDisplay = '';
       patroCalc.storedValue = '';
       patroCalc.displayString = (-parseFloat(patroCalc.displayString)).toString();
-      displayUpdate();
+      displayUpdate('handleSpecialKey.+/-');
       return;
+
+    case '(':
+      if (patroCalc.displayString === '0') {
+        patroCalc.displayString = `${key}`;
+        patroCalc.brackets++;
+      } else {
+        values = ['+', '-', '*', '/', '^', '('];
+        if (values.includes(patroCalc.displayString[patroCalc.displayString.length - 1])) {
+          patroCalc.displayString = `${patroCalc.displayString}${key}`;
+          patroCalc.brackets++;
+        }
+        if ('0123456789)'.includes(patroCalc.displayString[patroCalc.displayString.length - 1])) {
+          patroCalc.displayString = `${patroCalc.displayString}*${key}`;
+          patroCalc.brackets++;
+        }
+      }
+      displayUpdate('handleSpecialKey.(');
+      return;
+
+    case ')':
+      if (patroCalc.brackets > 0) {
+        patroCalc.displayString = `${patroCalc.displayString}${key}`;
+        patroCalc.brackets--;
+        displayUpdate('handleSpecialKey.)');
+      }
+      return;
+
+    case 'power':
+      key = key.replace('power', '^');
+      patroCalc.displayString = `${patroCalc.displayString}${key}`;
+      displayUpdate('handleSpecialKey.power');
+      return;
+
+    case 'root':
+      key = key.replace('root', String.fromCharCode(0x221a));
+      if (patroCalc.displayString === '0') {
+        patroCalc.displayString = `${key}`;
+      } else {
+        patroCalc.displayString = `${patroCalc.displayString}${key}`;
+      }
+      displayUpdate('handleSpecialKey.root');
+      return;
+
     default:
+      /* previous task
       if (patroCalc.storedCommand) {
         if (!patroCalc.storedValue) patroCalc.storedValue = patroCalc.displayString;
         calculate(patroCalc.storedCommand);
@@ -64,6 +127,12 @@ const handleSpecialKey = key => {
         }
       }
       displayUpdate();
+      */
+      values = ['+', '-', '*', '/'];
+      if (values.indexOf(key) in values) {
+        patroCalc.displayString = `${patroCalc.displayString}${key}`;
+        displayUpdate(`handleSpecialKey.default.${key}`);
+      }
       return;
   }
 };

@@ -1,7 +1,7 @@
 const keyboardEventListenerCallback = e => {
   let values;
 
-  values = ['+', '-', '*', '/', '=', '.', ',', 'Escape'];
+  values = ['+', '-', '*', '/', '=', '.', ',', 'Escape', '^', '(', ')'];
   if (values.indexOf(e.key) in values) {
     handleSpecialKey(e.key);
     return;
