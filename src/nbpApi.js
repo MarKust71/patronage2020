@@ -20,16 +20,18 @@ const nbpApi = {
     this.rates = [...this.tableA, ...this.tableB];
   },
 
-  currency2PLN(currency = '', value) {
+  rate(currency = '') {
     let ret = 0;
     if (['', 'PLN'].includes(currency)) {
-      ret = value;
+      ret = 1;
     } else {
       const found = this.rates.filter(element => element.code === currency);
-      if (found.length) ret = value * found[0].mid;
+      if (found.length) ret = found[0].mid;
     }
     return ret;
   }
 };
 
-// nbpApi.getRates().then(() => console.log(nbpApi.rates));
+const EC = (currency, value) => {
+  return value * nbpApi.rate(currency);
+};

@@ -6,7 +6,6 @@ const handleSpecialKey = key => {
   values = ['C', 'Escape'];
   if (values.indexOf(key) in values) {
     initCalc();
-    // console.clear();
     return;
   }
 
@@ -34,27 +33,18 @@ const handleSpecialKey = key => {
       return;
 
     case '=':
-      /* previous task
-      if (patroCalc.storedCommand) {
-        patroCalc.storedValue = patroCalc.displayString;
-        calculate(patroCalc.storedCommand);
-        patroCalc.storedCommand = '';
-        patroCalc.storedDisplay = '';
-        patroCalc.storedValue = '';
-        patroCalc.commandJustClicked = true;
-        return;
-      }
-*/
-      const areBracketsClosed = !!!(
+      const isBracketClosed = !!!(
         (patroCalc.displayString.match(/\(/g) || []).length - (patroCalc.displayString.match(/\)/g) || []).length
       );
-      if (areBracketsClosed) {
+      if (isBracketClosed) {
         patroCalc.parseDisplayString();
         patroCalc.storedCommand = '';
         patroCalc.storedDisplay = '';
         patroCalc.storedValue = '';
         patroCalc.commandJustClicked = true;
         displayUpdate('handleSpecialKey.=');
+      } else {
+        console.log('handleSpecialKey.=:', 'brackets not balanced');
       }
       return;
 
@@ -89,12 +79,18 @@ const handleSpecialKey = key => {
         patroCalc.displayString = `${patroCalc.displayString}${key}`;
         patroCalc.brackets--;
         displayUpdate('handleSpecialKey.)');
+      } else {
+        console.log('handleSpecialKey.):', 'brackets already balanced');
       }
       return;
 
     case 'power':
       key = key.replace('power', '^');
-      patroCalc.displayString = `${patroCalc.displayString}${key}`;
+      if (')0123456789'.includes(patroCalc.displayString[patroCalc.displayString.length - 1])) {
+        patroCalc.displayString = `${patroCalc.displayString}${key}`;
+      } else {
+        console.log('handleSpecialKey.power:', `'^' allowed only after one of ')0123456789'`);
+      }
       displayUpdate('handleSpecialKey.power');
       return;
 
@@ -102,36 +98,23 @@ const handleSpecialKey = key => {
       key = key.replace('root', String.fromCharCode(0x221a));
       if (patroCalc.displayString === '0') {
         patroCalc.displayString = `${key}`;
-      } else {
+      } else if (')0123456789+-**^/'.includes(patroCalc.displayString[patroCalc.displayString.length - 1])) {
         patroCalc.displayString = `${patroCalc.displayString}${key}`;
+      } else {
+        console.log('handleSpecialKey.root:', `'${String.fromCharCode(0x221a)}' allowed only after one of ')0123456789+-**^/'`);
       }
       displayUpdate('handleSpecialKey.root');
       return;
 
     default:
-      /* previous task
-      if (patroCalc.storedCommand) {
-        if (!patroCalc.storedValue) patroCalc.storedValue = patroCalc.displayString;
-        calculate(patroCalc.storedCommand);
-        if (patroCalc.storedCommand !== key) {
-          patroCalc.storedValue = '';
-          patroCalc.storedCommand = key;
-        }
-        patroCalc.commandJustClicked = true;
-      } else {
-        values = ['+', '-', '*', '/', 'power', 'root'];
-        if (values.indexOf(key) in values) {
-          patroCalc.storedDisplay = patroCalc.displayString;
-          patroCalc.storedCommand = key;
-          patroCalc.commandJustClicked = true;
-        }
-      }
-      displayUpdate();
-      */
       values = ['+', '-', '*', '/'];
       if (values.indexOf(key) in values) {
-        patroCalc.displayString = `${patroCalc.displayString}${key}`;
-        displayUpdate(`handleSpecialKey.default.${key}`);
+        if (')0123456789'.includes(patroCalc.displayString[patroCalc.displayString.length - 1])) {
+          patroCalc.displayString = `${patroCalc.displayString}${key}`;
+          displayUpdate(`handleSpecialKey.default.${key}`);
+        } else {
+          console.log('handleSpecialKey.default:', `'${key}' allowed only after one of ')0123456789'`);
+        }
       }
       return;
   }
