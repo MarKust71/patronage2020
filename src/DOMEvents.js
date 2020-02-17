@@ -1,11 +1,11 @@
 const buttons = [];
-const commands = ['C', 'CE', '/', 'x', '-', '+', '+/-', '.', '='];
+const commands = ['C', 'CE', '/', '*', '-', '+', '+/-', '.', '=', 'power', 'root', '(', ')'];
 
 const buttonClicked = i => {
   if (i.target.value <= 9) {
-    handleDigit(i.target.value);
+    handleDigit(i.currentTarget.value);
   } else {
-    handleSpecialKey(i.target.value);
+    handleSpecialKey(i.currentTarget.value);
   }
 };
 

@@ -1,11 +1,11 @@
 const handleSpecialKey = key => {
-  // console.log('handleSpecialKey:', key);
   let values;
+
+  key = key.replace('^', 'power');
 
   values = ['C', 'Escape'];
   if (values.indexOf(key) in values) {
     initCalc();
-    // console.clear();
     return;
   }
 
@@ -22,49 +22,100 @@ const handleSpecialKey = key => {
         patroCalc.commandJustClicked = false;
       } else {
         if (patroCalc.displayString.length > 1) {
+          if (patroCalc.displayString[patroCalc.displayString.length - 1] === ')') patroCalc.brackets++;
+          if (patroCalc.displayString[patroCalc.displayString.length - 1] === '(') patroCalc.brackets--;
           patroCalc.displayString = patroCalc.displayString.substring(0, patroCalc.displayString.length - 1);
         } else {
           patroCalc.displayString = '0';
         }
-        displayUpdate();
+        displayUpdate('handleSpecialKey.CE');
       }
       return;
+
     case '=':
-      if (patroCalc.storedCommand) {
-        patroCalc.storedValue = patroCalc.displayString;
-        calculate(patroCalc.storedCommand);
+      const isBracketClosed = !!!(
+        (patroCalc.displayString.match(/\(/g) || []).length - (patroCalc.displayString.match(/\)/g) || []).length
+      );
+      if (isBracketClosed) {
+        patroCalc.parseDisplayString();
         patroCalc.storedCommand = '';
         patroCalc.storedDisplay = '';
         patroCalc.storedValue = '';
         patroCalc.commandJustClicked = true;
-        return;
+        displayUpdate('handleSpecialKey.=');
+      } else {
+        console.log('handleSpecialKey.=:', 'brackets not balanced');
       }
       return;
+
     case '+/-':
       patroCalc.storedCommand = '';
       patroCalc.storedDisplay = '';
       patroCalc.storedValue = '';
       patroCalc.displayString = (-parseFloat(patroCalc.displayString)).toString();
-      displayUpdate();
+      displayUpdate('handleSpecialKey.+/-');
       return;
-    default:
-      if (patroCalc.storedCommand) {
-        if (!patroCalc.storedValue) patroCalc.storedValue = patroCalc.displayString;
-        calculate(patroCalc.storedCommand);
-        if (patroCalc.storedCommand !== key) {
-          patroCalc.storedValue = '';
-          patroCalc.storedCommand = key;
-        }
-        patroCalc.commandJustClicked = true;
+
+    case '(':
+      if (patroCalc.displayString === '0') {
+        patroCalc.displayString = `${key}`;
+        patroCalc.brackets++;
       } else {
-        values = ['+', '-', '*', '/'];
-        if (values.indexOf(key) in values) {
-          patroCalc.storedDisplay = patroCalc.displayString;
-          patroCalc.storedCommand = key;
-          patroCalc.commandJustClicked = true;
+        values = ['+', '-', '*', '/', '^', '('];
+        if (values.includes(patroCalc.displayString[patroCalc.displayString.length - 1])) {
+          patroCalc.displayString = `${patroCalc.displayString}${key}`;
+          patroCalc.brackets++;
+        }
+        if ('0123456789)'.includes(patroCalc.displayString[patroCalc.displayString.length - 1])) {
+          patroCalc.displayString = `${patroCalc.displayString}*${key}`;
+          patroCalc.brackets++;
         }
       }
-      displayUpdate();
+      displayUpdate('handleSpecialKey.(');
+      return;
+
+    case ')':
+      if (patroCalc.brackets > 0) {
+        patroCalc.displayString = `${patroCalc.displayString}${key}`;
+        patroCalc.brackets--;
+        displayUpdate('handleSpecialKey.)');
+      } else {
+        console.log('handleSpecialKey.):', 'brackets already balanced');
+      }
+      return;
+
+    case 'power':
+      key = key.replace('power', '^');
+      if (')0123456789'.includes(patroCalc.displayString[patroCalc.displayString.length - 1])) {
+        patroCalc.displayString = `${patroCalc.displayString}${key}`;
+      } else {
+        console.log('handleSpecialKey.power:', `'^' allowed only after one of ')0123456789'`);
+      }
+      displayUpdate('handleSpecialKey.power');
+      return;
+
+    case 'root':
+      key = key.replace('root', String.fromCharCode(0x221a));
+      if (patroCalc.displayString === '0') {
+        patroCalc.displayString = `${key}`;
+      } else if (')0123456789+-**^/'.includes(patroCalc.displayString[patroCalc.displayString.length - 1])) {
+        patroCalc.displayString = `${patroCalc.displayString}${key}`;
+      } else {
+        console.log('handleSpecialKey.root:', `'${String.fromCharCode(0x221a)}' allowed only after one of ')0123456789+-**^/'`);
+      }
+      displayUpdate('handleSpecialKey.root');
+      return;
+
+    default:
+      values = ['+', '-', '*', '/'];
+      if (values.indexOf(key) in values) {
+        if (')0123456789'.includes(patroCalc.displayString[patroCalc.displayString.length - 1])) {
+          patroCalc.displayString = `${patroCalc.displayString}${key}`;
+          displayUpdate(`handleSpecialKey.default.${key}`);
+        } else {
+          console.log('handleSpecialKey.default:', `'${key}' allowed only after one of ')0123456789'`);
+        }
+      }
       return;
   }
 };

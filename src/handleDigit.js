@@ -1,13 +1,17 @@
 const handleDigit = digit => {
-  // console.log('handleDigit:', digit);
-  if (patroCalc.displayString === '0' || patroCalc.commandJustClicked) {
+  // if (patroCalc.displayString === '0' || patroCalc.commandJustClicked) {
+  if (patroCalc.displayString === '0') {
     patroCalc.displayString = `${digit}`;
-    displayUpdate();
+    displayUpdate('handleDigit.1');
     if (patroCalc.commandJustClicked) patroCalc.commandJustClicked = false;
   } else {
     if (patroCalc.displayString.length < patroCalc.maxDisplayLength) {
-      patroCalc.displayString = `${patroCalc.displayString}${digit}`;
-      displayUpdate();
+      if (patroCalc.displayString[patroCalc.displayString.length - 1] === ')') {
+        patroCalc.displayString = `${patroCalc.displayString}*${digit}`;
+      } else {
+        patroCalc.displayString = `${patroCalc.displayString}${digit}`;
+      }
+      displayUpdate('handleDigit.2');
     } else {
       console.log('Max display length exceeded...');
     }

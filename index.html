@@ -2,15 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
     <link
       rel="stylesheet"
       href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
@@ -18,7 +12,7 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" type="text/css" href="./css/style.css" />
-    <title>patroCalc</title>
+    <title>patroCALC</title>
   </head>
   <body>
     <h1>PatroCALC</h1>
@@ -27,23 +21,53 @@
       <div class="calc_keys">
         <button class="btn clear" id="btnC" value="C">C</button>
         <button class="btn clearerror" id="btnCE" value="CE">CE</button>
-        <button class="btn oper divide" id="btn/" value="/">/</button>
+        <button class="btn oper posneg" id="btn+/-" value="+/-">+/-</button>
+        <button class="btn oper leftbracket" id="btn(" value="(">(</button>
+        <button class="btn oper rightbracket" id="btn)" value=")">)</button>
+        <button class="btn oper power" id="btnpower" value="power">x<sup>y</sup></button>
+        <button class="btn oper root" id="btnroot" value="root"><sup>y</sup>&#x221A;x</button>
         <button class="btn number" id="btn7" value="7">7</button>
         <button class="btn number" id="btn8" value="8">8</button>
         <button class="btn number" id="btn9" value="9">9</button>
-        <button class="btn oper multiplicate" id="btnx" value="*">x</button>
+        <button class="btn oper multiplicate" id="btn*" value="*">*</button>
         <button class="btn number" id="btn4" value="4">4</button>
         <button class="btn number" id="btn5" value="5">5</button>
         <button class="btn number" id="btn6" value="6">6</button>
-        <button class="btn oper substr" id="btn-" value="-">-</button>
+        <button class="btn oper divide" id="btn/" value="/">/</button>
         <button class="btn number" id="btn1" value="1">1</button>
         <button class="btn number" id="btn2" value="2">2</button>
         <button class="btn number" id="btn3" value="3">3</button>
-        <button class="btn oper add" id="btn+" value="+">+</button>
-        <button class="btn oper posneg" id="btn+/-" value="+/-">+/-</button>
-        <button class="btn number" id="btn0" value="0">0</button>
+        <button class="btn oper substr" id="btn-" value="-">-</button>
         <button class="btn point" id="btn." value=".">.</button>
+        <button class="btn number" id="btn0" value="0">0</button>
         <button class="btn oper equal" id="btn=" value="=">=</button>
+        <button class="btn oper add" id="btn+" value="+">+</button>
+      </div>
+      <div>
+        <div class="btn-group">
+          <button
+            class="btn btn-secondary dropdown-toggle"
+            type="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+            id="btn-currency"
+            value="PLN"
+            rate="1"
+          >
+            PLN
+          </button>
+          <div class="dropdown-menu" id="currencies" value="PLN">
+            <a class="dropdown-item" href="#">PLN</a>
+            <a class="dropdown-item" href="#">EUR</a>
+            <a class="dropdown-item" href="#">USD</a>
+          </div>
+          <div>
+            <label>Current rate in PLN:</label>
+            <input type="text" value="1" maxlength="8" id="input-rate" disabled />
+            <button class="btn btn-secondary" id="btn-apply">Apply</button>
+          </div>
+        </div>
       </div>
     </div>
     <script
@@ -61,16 +85,11 @@
       integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9"
       crossorigin="anonymous"
     ></script>
+    <script type="application/javascript" src="./src/nbpApi.js"></script>
     <script type="application/javascript" src="./src/DOMEvents.js"></script>
-    <script
-      type="application/javascript"
-      src="./src/keyboardEvents.js"
-    ></script>
+    <script type="application/javascript" src="./src/keyboardEvents.js"></script>
     <script type="application/javascript" src="./src/handleDigit.js"></script>
-    <script
-      type="application/javascript"
-      src="./src/handleSpecialKey.js"
-    ></script>
+    <script type="application/javascript" src="./src/handleSpecialKey.js"></script>
     <script type="application/javascript" src="./src/app.js"></script>
   </body>
 </html>
